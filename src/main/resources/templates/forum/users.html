@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Lista użytkowników</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+
+</head>
+<body>
+<h1>Lista użytkowników</h1>
+
+<table border="1">
+  <thead>
+  <tr>
+    <th>Nazwa użytkownika</th>
+    <th>Status</th>
+    <th>Zbanowany?</th>
+    <th>Akcja</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="u : ${users}">
+    <td th:text="${u.username}">username</td>
+    <td th:text="${u.role}">rola</td>
+    <td th:text="${u.banned}">zbanowany?</td>
+
+    <td th:if="${session.user != null
+            and (session.user.role != 'ADMIN' or session.user.role != 'MODERATOR')
+            and session.user.id != u.id}">
+      <form th:action="@{/forum/user/ban}" method="post" style="display:inline">
+        <input type="hidden" name="userId" th:value="${u.id}" />
+        <button type="submit" onclick="return confirm('Na pewno zbanować tego użytkownika?')">Zbanuj</button>
+      </form>
+      <form th:action="@{/forum/user/promote}" method="post" style="display:inline; margin-left: 10px;">
+        <input type="hidden" name="userId" th:value="${u.id}" />
+        <button type="submit" onclick="return confirm('Na pewno promować tego użytkownika na moderatora?')">Promuj</button>
+      </form>
+    </td>
+
+    <td th:if="${session.user != null and session.user.id == u.id}">
+      <em>(Ty)</em>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<p><a th:href="@{/forum}">← Powrót do forum</a></p>
+</body>
+</html>

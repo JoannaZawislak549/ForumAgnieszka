@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Forum - Strona Główna</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<header>
+    <div class="container">
+        Forum Dyskusyjne
+    </div>
+</header>
+
+<main class="container">
+    <section>
+        <h2>Witamy na naszym forum!</h2>
+        <p>Tu możesz przeglądać tematy, czytać posty i dzielić się swoimi opiniami.</p>
+
+        <div th:if="${session.user == null}">
+            <p>Nie jesteś zalogowany. <a th:href="@{/forum/login}">Zaloguj się</a> lub <a th:href="@{/forum/register}">zarejestruj</a>, aby pisać posty i tworzyć tematy.</p>
+        </div>
+
+        <div th:if="${session.user != null}">
+            <p>Zalogowany jako: <strong th:text="${session.user.username}">Użytkownik</strong> (<span th:text="${session.user.role}">rola</span>)</p>
+            <p>
+                <a th:href="@{/forum/users}">Zobacz listę użytkowników</a> |
+                <a th:href="@{/forum/logout}">Wyloguj się</a>
+            </p>
+
+            <h3>Tematy forum:</h3>
+            <div>
+                <ul>
+                    <li th:each="topic : ${topics}">
+                        <a th:href="@{/forum/topic/{id}(id=${topic.id})}" th:text="${topic.title}">Temat</a>
+                    </li>
+                </ul>
+            </div>
+            <div th:if="${errorMessage}" style="color: red; margin-bottom: 15px; font-weight: bold;">
+                <p th:text="${errorMessage}"></p>
+            </div>
+            <div>
+                <h3>Utwórz nowy temat</h3>
+                <form th:action="@{/forum/topic}" method="post">
+                    <input type="text" name="title" placeholder="Tytuł tematu" required style="width: 300px; padding: 8px;" />
+                    <button type="submit">Dodaj temat</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        &copy; 2025 Twoje Forum • Wszelkie prawa zastrzeżone.
+    </div>
+</footer>
+</body>
+</html>

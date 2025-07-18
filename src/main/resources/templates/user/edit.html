@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edytuj użytkownika</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+
+</head>
+<body>
+<h1>Edytuj dane użytkownika</h1>
+
+<form th:action="@{/forum/edit/{id}(id=${user.id})}" method="post">
+    <input type="text" name="username" th:value="${user.username}" required />
+    <input type="password" name="password" placeholder="Nowe hasło" required />
+    <button type="submit">Zapisz zmiany</button>
+</form>
+
+<a th:href="@{/forum}">Powrót</a>
+</body>
+</html>

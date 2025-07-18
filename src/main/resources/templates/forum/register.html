@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rejestracja</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<header>
+    <div class="container">
+        <a th:href="@{/forum}" style="color:white; text-decoration:none; font-weight:700;">← Powrót do forum</a>
+        <h1 style="margin-top: 10px;">Rejestracja</h1>
+    </div>
+</header>
+
+<main class="container">
+    <section style="max-width: 400px; margin: 0 auto;">
+        <form th:action="@{/forum/register}" method="post"
+              style="display: flex; flex-direction: column; gap: 15px; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+
+            <input type="text" name="username" placeholder="Nazwa użytkownika" required
+                   style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />
+
+            <input type="password" name="password" placeholder="Hasło" required
+                   style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />
+
+            <button type="submit" style="padding: 10px; background-color: #007bff; color: white; border: none; border-radius: 5px;">
+                Zarejestruj się
+            </button>
+
+            <p th:if="${error}" th:text="${error}" style="color: red; font-weight: bold; margin: 0;"></p>
+
+            <a th:href="@{/forum/login}" style="text-align: center; color: #007bff;">Masz już konto? Zaloguj się</a>
+        </form>
+    </section>
+</main>
+
+<footer>
+    <div class="container">
+        &copy; 2025 Twoje Forum • Wszelkie prawa zastrzeżone.
+    </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Logowanie</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<header>
+    <div class="container">
+        <h1>Logowanie</h1>
+    </div>
+</header>
+
+<main class="container" style="max-width: 400px; margin: 30px auto;">
+    <form th:action="@{/forum/login}" method="post" style="display: flex; flex-direction: column;">
+        <input type="text" name="username" placeholder="Nazwa użytkownika" required
+               style="padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px;" />
+        <input type="password" name="password" placeholder="Hasło" required
+               style="padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px;" />
+        <button type="submit" style="padding: 10px; background-color: #007bff; color: white; border:none; border-radius: 5px; font-weight: 600; cursor: pointer;">
+            Zaloguj
+        </button>
+    </form>
+
+    <p th:if="${error}" th:text="${error}" style="color: red; margin-top: 15px; font-weight: 600;"></p>
+
+    <p style="margin-top: 20px; text-align: center;">
+        Nie masz konta? <a th:href="@{/forum/register}">Zarejestruj się</a>
+    </p>
+</main>
+
+<footer>
+    <div class="container" style="text-align: center; padding: 15px 0; color: #666; font-size: 0.9rem;">
+        &copy; 2025 Twoje Forum • Wszelkie prawa zastrzeżone.
+    </div>
+</footer>
+</body>
+</html>
