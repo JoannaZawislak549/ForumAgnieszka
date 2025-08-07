@@ -22,7 +22,7 @@ public class DataInitializer implements CommandLineRunner {
     User user1 = new User();
     user1.setUsername("user1");
     user1.setPassword("user123");
-    user1.setBanned(true);
+    user1.setBanned(false);
     user1.setRole(UserRole.USER);
 
     User user2 = new User();
@@ -36,9 +36,9 @@ public class DataInitializer implements CommandLineRunner {
     user3.setRole(UserRole.USER);
 
     User user4 = new User();
-    user3.setUsername("moderator");
-    user3.setPassword("moderator");
-    user3.setRole(UserRole.MODERATOR);
+    user4.setUsername("moderator");
+    user4.setPassword("moderator");
+    user4.setRole(UserRole.MODERATOR);
 
     userRepository.save(user1);
     userRepository.save(user2);

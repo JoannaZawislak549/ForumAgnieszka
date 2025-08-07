@@ -5,7 +5,8 @@ import com.example.demo.repo.UserRepository;
 import com.example.demo.service.ForumService;
 import jakarta.servlet.http.HttpSession;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,18 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@AllArgsConstructor
 @RequestMapping("/forum")
 
 public class ForumController {
 
   private final ForumService forumService;
   private final UserRepository userRepository;
-
-  @Autowired
-  public ForumController(ForumService forumService, UserRepository userRepository) {
-    this.forumService = forumService;
-    this.userRepository = userRepository;
-  }
 
   @GetMapping
   public String showForum(Model model) {
@@ -88,16 +84,28 @@ public class ForumController {
 
   @GetMapping("/edit/{id}")
   public String editUserForm(@PathVariable Long id, Model model) {
-    User user = userRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Nie znaleziono użytkownika o id: " + id));
-    model.addAttribute("user", user);
+    Optional<User> userOpt = userRepository.findById(id);
+    if (userOpt.isEmpty()) {
+      throw new IllegalArgumentException("Nie znaleziono użytkownika o id: " + id);
+    }
+    model.addAttribute("user", userOpt.get());
     return "user/edit";
   }
 
   @PostMapping("/edit/{id}")
-  public String editUserSubmit(@PathVariable Long id, @ModelAttribute("user") User userForm) {
-    User user = userRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("Nie znaleziono użytkownika o id: " + id));
+  public String editUserSubmit(@PathVariable Long id, @ModelAttribute("user") User userForm, Model model) {
+    Optional<User> userOpt = userRepository.findById(id);
+    if (userOpt.isEmpty()) {
+      throw new IllegalArgumentException("Nie znaleziono użytkownika o id: " + id);
+    }
+    User user = userOpt.get();
+
+    Optional<User> existing = userRepository.findByUsername(userForm.getUsername());
+    if (existing.isPresent() && !existing.get().getId().equals(id)) {
+      model.addAttribute("user", user);
+      model.addAttribute("errorMessage", "Nazwa użytkownika jest już zajęta.");
+      return "user/edit";
+    }
 
     user.setUsername(userForm.getUsername());
     user.setPassword(userForm.getPassword());

@@ -9,22 +9,18 @@ import com.example.demo.repo.TopicRepository;
 import com.example.demo.repo.UserRepository;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class ForumService {
 
   private final UserRepository userRepository;
   private final TopicRepository topicRepository;
   private final PostRepository postRepository;
 
-  @Autowired
-  public ForumService(UserRepository userRepository, TopicRepository topicRepository, PostRepository postRepository) {
-    this.userRepository = userRepository;
-    this.topicRepository = topicRepository;
-    this.postRepository = postRepository;
-  }
 
   public List<Topic> getAllTopics() {
     return topicRepository.findAll();
