@@ -20,9 +20,6 @@
       <p>Musisz być <a th:href="@{/forum/login}">zalogowany</a>, aby dodawać posty i usuwać je.</p>
     </div>
 
-    <div th:if="${successMessage}" style="color: green; margin-bottom: 15px; font-weight: bold;">
-      <p th:text="${successMessage}"></p>
-    </div>
     <div th:if="${errorMessage}" style="color: red; margin-bottom: 15px; font-weight: bold;">
       <p th:text="${errorMessage}"></p>
     </div>
