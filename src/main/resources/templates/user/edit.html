@@ -8,6 +8,8 @@
 <body>
 <h1>Edytuj dane użytkownika</h1>
 
+<div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
 <form th:action="@{/forum/edit/{id}(id=${user.id})}" method="post">
     <input type="text" name="username" th:value="${user.username}" required />
     <input type="password" name="password" placeholder="Nowe hasło" required />

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @AllArgsConstructor
@@ -82,11 +83,18 @@ public class ForumController {
     return "redirect:/forum";
   }
 
-  @GetMapping("/edit/{id}")
-  public String editUserForm(@PathVariable Long id, Model model) {
+  private Optional<User> getUserOrRedirect(Long id, RedirectAttributes redirectAttributes) {
     Optional<User> userOpt = userRepository.findById(id);
     if (userOpt.isEmpty()) {
-      model.addAttribute("errorMessage", "Nie znaleziono użytkownika o id: " + id);
+      redirectAttributes.addFlashAttribute("errorMessage", "Nie znaleziono użytkownika o id: " + id);
+    }
+    return userOpt;
+  }
+
+  @GetMapping("/edit/{id}")
+  public String editUserForm(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
+    Optional<User> userOpt = getUserOrRedirect(id, redirectAttributes);
+    if (userOpt.isEmpty()) {
       return "redirect:/forum";
     }
     model.addAttribute("user", userOpt.get());
@@ -94,14 +102,12 @@ public class ForumController {
   }
 
   @PostMapping("/edit/{id}")
-  public String editUserSubmit(@PathVariable Long id, @ModelAttribute("user") User userForm, Model model) {
-    Optional<User> userOpt = userRepository.findById(id);
+  public String editUserSubmit(@PathVariable Long id, @ModelAttribute("user") User userForm, Model model, RedirectAttributes redirectAttributes) {
+    Optional<User> userOpt = getUserOrRedirect(id, redirectAttributes);
     if (userOpt.isEmpty()) {
-      model.addAttribute("errorMessage", "Nie znaleziono użytkownika o id: " + id);
       return "redirect:/forum";
     }
     User user = userOpt.get();
-
     Optional<User> existing = userRepository.findByUsername(userForm.getUsername());
     if (existing.isPresent() && !existing.get().getId().equals(id)) {
       model.addAttribute("user", user);
@@ -111,8 +117,8 @@ public class ForumController {
 
     user.setUsername(userForm.getUsername());
     user.setPassword(userForm.getPassword());
-
     userRepository.save(user);
+    redirectAttributes.addFlashAttribute("successMessage", "Dane użytkownika zostały zaktualizowane.");
     return "redirect:/forum";
   }
 
