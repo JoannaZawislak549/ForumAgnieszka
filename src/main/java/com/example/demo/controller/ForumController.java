@@ -86,7 +86,8 @@ public class ForumController {
   public String editUserForm(@PathVariable Long id, Model model) {
     Optional<User> userOpt = userRepository.findById(id);
     if (userOpt.isEmpty()) {
-      throw new IllegalArgumentException("Nie znaleziono użytkownika o id: " + id);
+      model.addAttribute("errorMessage", "Nie znaleziono użytkownika o id: " + id);
+      return "redirect:/forum";
     }
     model.addAttribute("user", userOpt.get());
     return "user/edit";
@@ -96,7 +97,8 @@ public class ForumController {
   public String editUserSubmit(@PathVariable Long id, @ModelAttribute("user") User userForm, Model model) {
     Optional<User> userOpt = userRepository.findById(id);
     if (userOpt.isEmpty()) {
-      throw new IllegalArgumentException("Nie znaleziono użytkownika o id: " + id);
+      model.addAttribute("errorMessage", "Nie znaleziono użytkownika o id: " + id);
+      return "redirect:/forum";
     }
     User user = userOpt.get();
 
